@@ -1,0 +1,114 @@
+:root {
+  font-size: 1rem;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 50px;
+  min-height: 100vh;
+  background-color: #ece8e8;
+}
+
+.container {
+  height: 50vh;
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.title {
+  text-align: center;
+  grid-column: 2/3;
+  grid-row: 1/1;
+  font-size: 2.25rem;
+  font-weight: 600;
+}
+
+.container-game {
+  grid-row: 2/3;
+  grid-column: 2/3;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 50vh;
+  height: 50vh;
+  border: 2px solid black;
+}
+
+.container-game div {
+  border: 2px solid black;
+  padding: 1.25rem;
+}
+
+.marks {
+  display: block;
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.header {
+  grid-row: 2/3;
+}
+
+.form-names {
+  border-radius: 10px;
+  padding: 1.5rem;
+  background-color: #bb5098;
+}
+
+.form-names legend {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.form-names fieldset {
+  margin-bottom: 20px;
+}
+
+.form-names label {
+  display: block;
+}
+
+.form-names input {
+  padding-left: 0.625rem;
+  border-radius: 4px;
+  border: none;
+  height: 1.875rem;
+}
+
+.submit {
+  font-size: 24px;
+  padding: 10px;
+  width: 200px;
+  border-radius: 10px;
+  background-color: #ffff;
+  font-weight: 800;
+  border: 1px solid black;
+}
+
+.score-table {
+  padding: 1.25rem;
+  grid-column: 3/4;
+  grid-row: 2/3;
+  background-color: #bb5098;
+}
+
+.score-table h2 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.score-table p {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+}

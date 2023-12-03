@@ -5,12 +5,55 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tic Tac Toe</title>
-  <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="reset.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+  <div class="container">
+    <div class="title">TIC TAC TOE</div>
 
+    <div class="header">
+      <form action="" class="form-names">
+        <fieldset>
+          <legend>PLAYER ONE</legend>
+          <div>
+            <label for="name-player-one">Name <span aria-label="required"
+                style="color:rgb(129, 34, 34)">*</span></label>
+            <input type="text" name="name-player-one" id="name-player-one" required placeholder="Enter your name...">
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>PLAYER TWO</legend>
+          <div>
+            <label for="name-player-two">Name <span aria-label="required"
+                style="color:rgb(129, 34, 34)">*</span></label>
+            <input type="text" name="name-player-two" id="name-player-two" required placeholder="Enter your name...">
+          </div>
+        </fieldset>
+        <button class="submit">START</button>
+      </form>
+    </div>
+    <div class="container-game">
+      <div class="cell" data-position="1"></div>
+      <div class="cell" data-position="2"></div>
+      <div class="cell" data-position="3"></div>
+      <div class="cell" data-position="4"></div>
+      <div class="cell" data-position="5"></div>
+      <div class="cell" data-position="6"></div>
+      <div class="cell" data-position="7"></div>
+      <div class="cell" data-position="8"></div>
+      <div class="cell" data-position="9"></div>
+    </div>
+
+    <div class="score-table">
+      <h2>Score Table</h2>
+      <div>
+        <p>Player 1:</p>
+        <p>Player 2:</p>
+      </div>
+    </div>
+  </div>
   <script src="script.js"></script>
 </body>
 
