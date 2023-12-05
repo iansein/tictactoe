@@ -11,13 +11,13 @@ body {
   flex-direction: column;
   gap: 50px;
   min-height: 100vh;
-  background-color: #ece8e8;
+  background-color: #3c1b43;
 }
 
 .container {
   height: 50vh;
   display: grid;
-  gap: 1.25rem;
+  gap: 5rem;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
 }
@@ -28,6 +28,7 @@ body {
   grid-row: 1/1;
   font-size: 2.25rem;
   font-weight: 600;
+  color: #d9d9d9;
 }
 
 .container-game {
@@ -38,11 +39,11 @@ body {
   grid-template-rows: repeat(3, 1fr);
   width: 50vh;
   height: 50vh;
-  border: 2px solid black;
+  border: 1px solid black;
 }
 
 .container-game div {
-  border: 2px solid black;
+  border: 1px solid black;
   padding: 1.25rem;
 }
 
@@ -60,7 +61,7 @@ body {
 .form-names {
   border-radius: 10px;
   padding: 1.5rem;
-  background-color: #bb5098;
+  background-color: #f8f7ff;
 }
 
 .form-names legend {
@@ -75,6 +76,7 @@ body {
 
 .form-names label {
   display: block;
+  margin-bottom: 0.3125rem;
 }
 
 .form-names input {
@@ -82,6 +84,11 @@ body {
   border-radius: 4px;
   border: none;
   height: 1.875rem;
+  background-color: #c1c1c1;
+}
+
+.form-display {
+  display: none;
 }
 
 .submit {
@@ -95,20 +102,66 @@ body {
 }
 
 .score-table {
+  height: 200px;
+  border-radius: 10px;
   padding: 1.25rem;
   grid-column: 3/4;
   grid-row: 2/3;
-  background-color: #bb5098;
+  background-color: #f8f7ff;
 }
 
 .score-table h2 {
   text-align: center;
   font-size: 2rem;
   font-weight: 800;
+  margin-bottom: 1.625rem;
 }
 
 .score-table p {
   font-size: 1.2rem;
   font-weight: 800;
   margin-bottom: 1.5rem;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.popup-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f8f7ff;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  width: 400px;
+  height: 200px;
+}
+
+.modal-para {
+  font-weight: 800;
+  font-size: 20px;
+}
+
+.btn-next-round,
+.btn-restart {
+  padding: 1.5rem;
+  font-size: 1.125rem;
+  width: 12.5rem;
+  margin-top: 0.625rem;
+  border-radius: 10px;
+  border: 1px solid #000000;
+}
+
+.btn-next-round:hover,
+.btn-restart:hover {
+  background-color: #b6b6b6;
 }
