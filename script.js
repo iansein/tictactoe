@@ -1,18 +1,30 @@
-//^ Player object
-function player(name) {
+function player(name = "DefaultName", imgPath = "defaultPath") {
   let score = 0;
   let playerName = name;
+  let markImgPath = imgPath;
   const marks = [];
+
   const win = () => score++;
   const getScore = () => score;
-  const restartScore = () => (score = 0);
-  const restartMarks = () => marks.splice(0);
+
+  const restartScore = () => {
+    score = 0;
+  };
+
+  const restartMarks = () => {
+    marks.length = 0;
+  };
+
   const setMark = (mark) => marks.push(mark);
   const getMarks = () => marks;
+
   const setName = (name) => {
     playerName = name;
   };
+
   const getName = () => playerName;
+  const getMarkImagePath = () => markImgPath;
+
   return {
     win,
     getScore,
@@ -22,12 +34,84 @@ function player(name) {
     getName,
     restartScore,
     restartMarks,
+    getMarkImagePath,
   };
 }
 
-//^ This object has the functions that manipulate the game board
 const gameBoard = (function () {
+  const CONTAINER_SELECTOR = ".container-game";
+
   let attempts = 9;
+
+  const clearContainer = () => {
+    const container = document.querySelector(CONTAINER_SELECTOR);
+    while (container.firstChild) {
+      container.removeChild(container.firstChild);
+    }
+  };
+
+  const createCell = () => {
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
+    return cell;
+  };
+
+  const initializeGame = () => {
+    const container = document.querySelector(CONTAINER_SELECTOR);
+
+    for (let i = 1; i < 10; i++) {
+      let cell = createCell();
+      cell.setAttribute("data-position", i);
+      container.appendChild(cell);
+    }
+  };
+
+  const refreshTable = function (playerOne, playerTwo) {
+    const playerOneTable = document.querySelector("#player-one");
+    const playerTwoTable = document.querySelector("#player-two");
+    playerOneTable.textContent = `${playerOne.getName()}: ${playerOne.getScore()}`;
+    playerTwoTable.textContent = `${playerTwo.getName()}: ${playerTwo.getScore()}`;
+  };
+
+  const restartGame = (playerOne, playerTwo) => {
+    clearContainer();
+    initializeGame();
+    playerOne.restartScore();
+    playerOne.restartMarks();
+    playerTwo.restartScore();
+    playerTwo.restartMarks();
+    attempts = 9;
+  };
+
+  const nextRound = (playerOne, playerTwo) => {
+    clearContainer();
+    initializeGame();
+    playerOne.restartMarks();
+    playerTwo.restartMarks();
+    attempts = 9;
+  };
+
+  return {
+    restartGame,
+    getAttempts: () => attempts,
+    subtractAttempts: () => attempts--,
+    getOdds: () => oddsToWin,
+    refreshTable,
+    nextRound,
+  };
+})();
+
+const game = (function () {
+  const CLASS_MARKS = "marks";
+  const CLASS_POPUP = "popup";
+  const CLASS_BTN_RESTART = ".btn-restart";
+  const CLASS_BTN_NEXT_ROUND = ".btn-next-round";
+
+  const playerOne = player("Player One", "./assets/cross.png");
+  const playerTwo = player("Player Two", "./assets/circle.png");
+  const btnRestart = document.querySelector(CLASS_BTN_RESTART);
+  const btnNextRound = document.querySelector(CLASS_BTN_NEXT_ROUND);
+
   const oddsToWin = [
     [1, 2, 3],
     [4, 5, 6],
@@ -39,144 +123,46 @@ const gameBoard = (function () {
     [7, 5, 3],
   ];
 
-  const restartGame = (playerOne, playerTwo) => {
-    const container = document.querySelector(".container-game");
-
-    while (container.firstChild) {
-      container.removeChild(container.firstChild);
-    }
-    playerOne.restartScore();
-    playerOne.restartMarks();
-
-    playerTwo.restartScore();
-    playerTwo.restartMarks();
-    attempts = 9;
-
-    for (let i = 1; i < 10; i++) {
-      let cell = document.createElement("div");
-      cell.setAttribute("data-position", i);
-      cell.classList.add("cell");
-      container.appendChild(cell);
-    }
-  };
-
-  const nextRound = (playerOne, playerTwo) => {
-    const container = document.querySelector(".container-game");
-
-    while (container.firstChild) {
-      container.removeChild(container.firstChild);
-    }
-    playerOne.restartMarks();
-
-    playerTwo.restartMarks();
-    attempts = 9;
-
-    for (let i = 1; i < 10; i++) {
-      let cell = document.createElement("div");
-      cell.setAttribute("data-position", i);
-      cell.classList.add("cell");
-      container.appendChild(cell);
-    }
-  };
-  const getAttempts = () => attempts;
-  const subtractAttempts = () => attempts--;
-  const getOdds = () => oddsToWin;
-
-  //& This function checks if the player won
-  const checkWinner = (player) => {
-    if (player.getMarks().length >= 3) {
-      for (let i = 0; i < oddsToWin.length; i++) {
-        let winningPlay = game.findOddsToWin(oddsToWin[i], player.getMarks());
-        if (winningPlay) {
-          player.win();
-          const cells = document.querySelectorAll(".cell");
-          cells.forEach((cell) => {
-            let cellAttribute = Number(cell.getAttribute("data-position"));
-            if (winningPlay.includes(cellAttribute))
-              cell.style.backgroundColor = "#72CC50";
-          });
-          showWindow(player);
-          return true;
-        }
-      }
-    }
-  };
-
-  const refreshTable = function (playerOne, playerTwo) {
-    const playerOneTable = document.querySelector("#player-one");
-    const playerTwoTable = document.querySelector("#player-two");
-    playerOneTable.textContent = `${playerOne.getName()}: ${playerOne.getScore()}`;
-    playerTwoTable.textContent = `${playerTwo.getName()}: ${playerTwo.getScore()}`;
-  };
-
-  const showWindow = function (player) {
-    const modalWinPara = document.querySelector("#modal-win");
-    const popup = document.getElementById("popup");
-    const btnRestart = document.querySelector(".btn-restart");
-
-    popup.style.display = "block";
-    modalWinPara.textContent = `${player.getName()} wins!`;
-  };
-
-  return {
-    restartGame,
-    getAttempts,
-    subtractAttempts,
-    getOdds,
-    checkWinner,
-    showWindow,
-    refreshTable,
-    nextRound,
-  };
-})();
-
-const game = (function () {
-  const playerOne = player("X");
-  const playerTwo = player("Y");
-  const btnRestart = document.querySelector(".btn-restart");
-  btnRestart.addEventListener("click", () => {
+  const restartGame = () => {
     gameBoard.restartGame(playerOne, playerTwo);
-    const popup = document.getElementById("popup");
+    const popup = document.getElementById(CLASS_POPUP);
     popup.style.display = "none";
     gameBoard.refreshTable(playerOne, playerTwo);
     play();
-  });
+  };
 
-  const nextRound = document.querySelector(".btn-next-round");
-  nextRound.addEventListener("click", () => {
+  const nextRound = () => {
     gameBoard.nextRound(playerOne, playerTwo);
-    const popup = document.getElementById("popup");
+    const popup = document.getElementById(CLASS_POPUP);
     popup.style.display = "none";
     gameBoard.refreshTable(playerOne, playerTwo);
     play();
-  });
+  };
 
-  const play = function () {
+  const addMark = (cell, player) => {
+    const img = document.createElement("img");
+    img.src = player.getMarkImagePath();
+    img.classList.add(CLASS_MARKS);
+    cell.appendChild(img);
+    gameBoard.subtractAttempts();
+    player.setMark(Number(cell.getAttribute("data-position")));
+    if (checkWinner(player)) {
+      gameBoard.refreshTable(playerOne, playerTwo);
+    } else if (gameBoard.getAttempts() === 0) {
+      showWindowDraw();
+    }
+  };
+
+  const play = () => {
     const cells = document.querySelectorAll(".cell");
 
     cells.forEach((cell) => {
       const clickHandler = () => {
         if (gameBoard.getAttempts() % 2 === 0) {
-          let imgCircle = document.createElement("img");
-          imgCircle.src = "./assets/circle.png";
-          imgCircle.classList.add("marks");
-          cell.appendChild(imgCircle);
-          gameBoard.subtractAttempts();
-          playerOne.setMark(Number(cell.getAttribute("data-position")));
-          if (gameBoard.checkWinner(playerOne)) {
-            gameBoard.refreshTable(playerOne, playerTwo);
-          }
+          addMark(cell, playerTwo);
           cell.removeEventListener("click", clickHandler);
         } else {
-          let imgCross = document.createElement("img");
-          imgCross.src = "./assets/cross.png";
-          imgCross.classList.add("marks");
-          cell.appendChild(imgCross);
-          gameBoard.subtractAttempts();
-          playerTwo.setMark(Number(cell.getAttribute("data-position")));
-          if (gameBoard.checkWinner(playerTwo)) {
-            gameBoard.refreshTable(playerOne, playerTwo);
-          }
+          addMark(cell, playerOne);
           cell.removeEventListener("click", clickHandler);
         }
       };
@@ -184,7 +170,7 @@ const game = (function () {
     });
   };
 
-  const startTheGame = function () {
+  const startTheGame = () => {
     const form = document.querySelector(".form-names");
 
     form.addEventListener("submit", (event) => {
@@ -202,18 +188,58 @@ const game = (function () {
 
       form.classList.add("form-display");
 
-      game.play();
+      play();
     });
   };
 
-  const findOddsToWin = function (oddsToWin, marks) {
-    let winningPlay = oddsToWin.every((item) => marks.includes(item));
-    if (winningPlay) {
-      console.log(oddsToWin);
-      return oddsToWin;
+  const changeCellColors = (winningPlay) => {
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach((cell) => {
+      let cellAttribute = Number(cell.getAttribute("data-position"));
+      if (winningPlay.includes(cellAttribute)) {
+        cell.style.backgroundColor = "#72CC50";
+      }
+    });
+  };
+
+  const checkWinner = (player) => {
+    if (player.getMarks().length >= 3) {
+      for (let i = 0; i < oddsToWin.length; i++) {
+        let winningPlay = game.findOddsToWin(oddsToWin[i], player.getMarks());
+        if (winningPlay) {
+          player.win();
+          changeCellColors(winningPlay);
+          showWindowWinner(player);
+          return true;
+        }
+      }
     }
     return false;
   };
+
+  const showWindowWinner = function (player) {
+    const modalWinPara = document.querySelector("#modal-win");
+    const popup = document.getElementById("popup");
+
+    popup.style.display = "block";
+    modalWinPara.textContent = `${player.getName()} wins!`;
+  };
+
+  const showWindowDraw = function () {
+    const modalWinPara = document.querySelector("#modal-win");
+    const popup = document.getElementById("popup");
+
+    popup.style.display = "block";
+    modalWinPara.textContent = `It's a draw`;
+  };
+
+  const findOddsToWin = (oddsToWin, marks) => {
+    let winningPlay = oddsToWin.every((item) => marks.includes(item));
+    return winningPlay ? oddsToWin : false;
+  };
+
+  btnRestart.addEventListener("click", restartGame);
+  btnNextRound.addEventListener("click", nextRound);
 
   return { play, findOddsToWin, startTheGame };
 })();
